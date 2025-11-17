@@ -1,0 +1,62 @@
+.hero {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff4e0, #ffd6a5);
+  text-align: center;
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.hero-content {
+  max-width: 600px;
+  background: #ffffffcc;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+}
+
+.hero-icon {
+  color: #ff7f50;
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.hero h1 span {
+  color: #ff7f50;
+}
+
+.hero p {
+  color: #555;
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}
+
+.hero-btn {
+  background-color: #ff7f50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: #ff5400;
+  transform: scale(1.05);
+}
+
+.sparkle-icon {
+  vertical-align: middle;
+  color: #ff7f50;
+  margin-left: 5px;
+}
+
