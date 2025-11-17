@@ -59,6 +59,7 @@ const Login = () => {
                 )
 
                 const token = res.data.token; // 🔥 get token
+                console.log("token",token)
             // 🔥 store token
             localStorage.setItem("token", token);
 
