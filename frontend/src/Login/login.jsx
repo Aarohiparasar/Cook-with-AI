@@ -1,16 +1,13 @@
-import Meta from "antd/es/card/Meta"
 import { useState } from "react"
 import axios from "axios"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";   // 🔥 FIX
 import './login.css'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
     const navigate = useNavigate();
-    const { setToken } = useAuth();     // 🔥 FIX
 
     const [showPassword, setShowPassword] = useState(false);
     const [submissionError, setSubmissionError] = useState(false);
@@ -49,23 +46,18 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const validated = validate();
 
             if (validated) {
-                const res = await axios.post(
+                await axios.post(
                     `${API_URL}/auth/login`,
                     formValues,
-                    { withCredentials: true }
+                    {
+                        withCredentials: true, // 🔥 sends cookie
+                    }
                 );
-
-                const token = res.data.token;
-
-                // 🔥 Save token
-                localStorage.setItem("token", token);
-
-                // 🔥 Update global AuthContext state
-                setToken(token);
 
                 navigate("/home");
             }
