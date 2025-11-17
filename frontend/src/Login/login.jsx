@@ -57,6 +57,15 @@ const Login = () => {
                 const res = await axios.post(`${API_URL}/auth/login`,formValues,
                 { withCredentials: true }
                 )
+
+                const token = res.data.token; // 🔥 get token
+            // 🔥 store token
+            localStorage.setItem("token", token);
+
+            // 🔥 also update AuthContext state
+            if (window.setToken) {
+                window.setToken(token);
+            }
                 navigate('/home')
             }
         } catch (error) {
