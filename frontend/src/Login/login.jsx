@@ -2,85 +2,88 @@ import Meta from "antd/es/card/Meta"
 import { useState } from "react"
 import axios from "axios"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";   // 🔥 FIX
 import './login.css'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-
 const Login = () => {
-    const navigate=useNavigate()
-    const [showPassword, setShowPassword] = useState(false);
-    const [submissionError, setSubmissionError] = useState(false)
-    const [formValues, setFormValues] = useState({
-        userName: '',
+    const navigate = useNavigate();
+    const { setToken } = useAuth();     // 🔥 FIX
 
-        password: '',
-    })
+    const [showPassword, setShowPassword] = useState(false);
+    const [submissionError, setSubmissionError] = useState(false);
+    const [formValues, setFormValues] = useState({
+        userName: "",
+        password: "",
+    });
+
     const [error, setError] = useState({
-        userName: '',
-        password: '',
-    })
+        userName: "",
+        password: "",
+    });
 
     const validate = () => {
-        const newError = {}
+        const newError = {};
 
         if (!formValues.userName.trim()) {
-            newError.userName = "userName is required"
+            newError.userName = "userName is required";
         }
 
         if (!formValues.password.trim()) {
-            newError.password = "Password is required"
+            newError.password = "Password is required";
         }
 
         setError(newError);
         return Object.keys(newError).length === 0;
-    }
+    };
 
     const handleChange = (e) => {
-        const { name, value } = e.target
-
+        const { name, value } = e.target;
         setFormValues((prev) => ({
             ...prev,
-            [name]: value
-        }))
-    }
+            [name]: value,
+        }));
+    };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            const validated = validate()
-            console.log("✅ Form Submitted:", formValues);
-
+            const validated = validate();
 
             if (validated) {
-                const res = await axios.post(`${API_URL}/auth/login`,formValues,
-                { withCredentials: true }
-                )
+                const res = await axios.post(
+                    `${API_URL}/auth/login`,
+                    formValues,
+                    { withCredentials: true }
+                );
 
-                const token = res.data.token; // 🔥 get token
-                console.log("token",token)
-            // 🔥 store token
-            localStorage.setItem("token", token);
+                const token = res.data.token;
 
-            // 🔥 also update AuthContext state
-            if (window.setToken) {
-                window.setToken(token);
-            }
-                navigate('/home')
+                // 🔥 Save token
+                localStorage.setItem("token", token);
+
+                // 🔥 Update global AuthContext state
+                setToken(token);
+
+                navigate("/home");
             }
         } catch (error) {
-            setSubmissionError(error.response.data)
+            setSubmissionError(error.response?.data || "Login failed");
         }
-    }
+    };
 
     return (
         <div className="signupPage">
             <form onSubmit={handleSubmit} className="form">
                 <div>
                     <label>UserName:</label>
-                    <input name="userName" value={formValues.userName}
-                        onChange={(e) => handleChange(e)} />
+                    <input
+                        name="userName"
+                        value={formValues.userName}
+                        onChange={handleChange}
+                    />
                 </div>
                 <p className="error"> {error.userName}</p>
 
@@ -91,24 +94,31 @@ const Login = () => {
                             type={showPassword ? "text" : "password"}
                             name="password"
                             value={formValues.password}
-                            onChange={(e) => handleChange(e)}
+                            onChange={handleChange}
                             className="password-input"
                         />
                         <span
                             className="eye-icon"
-                            onClick={() => setShowPassword((prev) => !prev)}
+                            onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                     </div>
                 </div>
+
                 <p className="error">{error.password}</p>
-                <p style={{ marginLeft: "6rem", color: "red" }}>{submissionError.message}</p>
+
+                <p style={{ marginLeft: "6rem", color: "red" }}>
+                    {submissionError?.message}
+                </p>
+
                 <button type="submit">Submit</button>
-                <span>Forget password? <Link to='/signup'>signUp</Link></span>
+                <span>
+                    Forget password? <Link to="/signup">signUp</Link>
+                </span>
             </form>
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;
