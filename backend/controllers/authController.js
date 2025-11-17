@@ -45,10 +45,10 @@ export const SignUp = async (req, res) => {
             );
 
             res.cookie("jwt", token, {
-                maxAge: 15 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
-                sameSite: "strict",
-                secure: process.env.NODE_ENV !== "development",
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
             res.status(201).json({
@@ -90,10 +90,10 @@ export const Login = async (req, res) => {
         );
 
         res.cookie("jwt", token, {
-            maxAge: 15 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: "strict",
-            secure: process.env.NODE_ENV !== "development",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 15 * 24 * 60 * 60 * 1000,
         });
 
         res.status(200).json({
