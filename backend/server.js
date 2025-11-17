@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 
 app.use(cors({
-    origin:true,
+    origin:["https://cook-with-ai-two.vercel.app"],
     credentials: true
 }))
 app.use(express.json())
